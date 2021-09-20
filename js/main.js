@@ -19,6 +19,15 @@ const getRandomFloat = (min, max, lengthAfterThePoint) => {
 };
 
 const getRandomArrayElement = (elements) => elements[_.random(0, elements.length - 1)];
+const getNewRandomArray = (array) => {
+  const newArray = array.slice();
+  for (let i = newArray.length - 1; i > 0; i--) {
+    let j = getRandomInteger(0, i);
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  newArray.length = getRandomInteger(1, array.length);
+  return newArray;
+};
 
 const TYPE_OF_LIVING = [
   'palace',
@@ -65,9 +74,9 @@ const getSimilarAd = function() {
       guests: getRandomInteger(0, Infinity),
       checkin: getRandomArrayElement(CHECK_IN_TIME),
       checkout: getRandomArrayElement(CHECK_IN_TIME),
-      features: '',
+      features: getNewRandomArray(FEATURES),
       description: 'Отличное помещение. Очень светлое. Много комнат. Отдых тут - просто красота.',
-      photos: '',
+      photos: getNewRandomArray(PHOTOS),
     },
     location: {
       x: randomLongitude,
@@ -77,5 +86,3 @@ const getSimilarAd = function() {
 };
 
 const similarAds = new Array(10).fill(null).map(() => getSimilarAd());
-console.log(similarAds);
-
