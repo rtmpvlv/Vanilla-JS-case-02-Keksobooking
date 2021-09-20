@@ -7,20 +7,75 @@ const getRandomInteger = (min, max) => {
     return -1;
   }
   return Math.floor(Math.random()*(max + 1 - min) + min);
-}
-alert(getRandomInteger(1, 100));
+};
 
-const getRandomFloat = (min, max, afterDecimalPoint) => {
+const getRandomFloat = (min, max, lengthAfterThePoint) => {
   if (max <= min) {
     [min, max] = [max, min];
   } else if (max < 0 || min < 0) {
     return -1;
   }
-  return (Math.random()*(max-min) + min).toFixed(afterDecimalPoint);
-}
-alert(getRandomFloat(1.1, 1.3, 2));
+  return (Math.random()*(max-min) + min).toFixed(lengthAfterThePoint);
+};
 
-const checkStringLength = (str, maxLength) => {
-  return String(str).length <= Number(maxLength);
-}
-alert(checkStringLength('I\'ve never gonna run.', 32));
+const getRandomArrayElement = (elements) => elements[_.random(0, elements.length - 1)];
+
+const TYPE_OF_LIVING = [
+  'palace',
+  'flat',
+  'house',
+  'bungalow',
+];
+
+const CHECK_IN_TIME = [
+  '12:00',
+  '13:00',
+  '14:00',
+];
+
+const FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner',
+];
+
+const PHOTOS = [
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
+];
+
+const randomLongitude = getRandomFloat(35.65000, 35.70000, 5);
+const randomLatitude = getRandomFloat(139.70000, 139.80000, 5);
+
+const getSimilarAd = function() {
+  return {
+    author: {
+      avatar: 'img/avatars/user0' + getRandomInteger(1, 8) + '.png',
+    },
+    offer: {
+      title: 'Отличное место для отдыха.',
+      address: randomLongitude + ' ' + randomLatitude,
+      price: getRandomInteger(0, Infinity),
+      type: getRandomArrayElement(TYPE_OF_LIVING),
+      rooms: getRandomInteger(0, Infinity),
+      guests: getRandomInteger(0, Infinity),
+      checkin: getRandomArrayElement(CHECK_IN_TIME),
+      checkout: getRandomArrayElement(CHECK_IN_TIME),
+      features: '',
+      description: 'Отличное помещение. Очень светлое. Много комнат. Отдых тут - просто красота.',
+      photos: '',
+    },
+    location: {
+      x: randomLongitude,
+      y: randomLatitude,
+    },
+  };
+};
+
+const similarAds = new Array(10).fill(null).map(() => getSimilarAd());
+console.log(similarAds);
+
