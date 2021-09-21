@@ -5,7 +5,6 @@ import {
   getNewRandomArray
 } from './util.js';
 
-const SIMILAR_ADS_COUNT = 10;
 const PRISE = {
   MIN: 1,
   MAX: Infinity,
@@ -72,4 +71,7 @@ const getSimilarAd = function() {
   };
 };
 
-export const similarAds = new Array(SIMILAR_ADS_COUNT).fill(null).map(() => getSimilarAd());
+export {
+  getSimilarAd
+};
+

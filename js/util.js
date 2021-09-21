@@ -16,7 +16,7 @@ const getRandomFloat = (min, max, lengthAfterThePoint) => {
   return (Math.random()*(max-min) + min).toFixed(lengthAfterThePoint);
 };
 
-const getRandomArrayElement = (elements) => elements[_.random(0, elements.length - 1)];
+const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
 const getNewRandomArray = (array) => {
   const newArray = array.slice();
