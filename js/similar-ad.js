@@ -5,17 +5,19 @@ import {
   getNewRandomArray
 } from './util.js';
 
+const SIMILAR_ADS_COUNT = 10;
+
 const PRISE = {
   MIN: 1,
-  MAX: Infinity,
+  MAX: 100000,
 };
 const ROOMS = {
   MIN: 1,
-  MAX: Infinity,
+  MAX: 100,
 };
 const GUESTS = {
   MIN: 1,
-  MAX: Infinity,
+  MAX: 1000,
 };
 const TypesOfLiving = [
   'palace',
@@ -42,7 +44,7 @@ const Photos = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
 ];
 
-const getSimilarAd = function() {
+const getSimilarAd = () => {
 
   const randomLongitude = getRandomFloat(35.65000, 35.70000, 5);
   const randomLatitude = getRandomFloat(139.70000, 139.80000, 5);
@@ -71,7 +73,8 @@ const getSimilarAd = function() {
   };
 };
 
-export {
-  getSimilarAd
-};
+const getSimilarAds = () => new Array(SIMILAR_ADS_COUNT).fill(null).map(() => getSimilarAd());
 
+export {
+  getSimilarAds
+};

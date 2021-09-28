@@ -1,8 +1,5 @@
-import {
-  getSimilarAd
-} from './sim-ads.js';
+import { getSimilarAds } from './similar-ad.js';
+import { renderAd } from './render-similar-ad.js';
 
-const SIMILAR_ADS_COUNT = 10;
-
-const similarAds = new Array(SIMILAR_ADS_COUNT).fill(null).map(() => getSimilarAd());
-console.log(similarAds);
+getSimilarAds();
+renderAd();

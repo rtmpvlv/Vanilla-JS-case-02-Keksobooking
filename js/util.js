@@ -24,7 +24,7 @@ const getNewRandomArray = (array) => {
     let j = getRandomInteger(0, i);
     [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
   }
-  newArray.length = getRandomInteger(1, array.length);
+  newArray.length = getRandomInteger(1, newArray.length);
   return newArray;
 };
 
