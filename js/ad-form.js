@@ -5,13 +5,13 @@ const setFiltering = () => {
   const adFormTimein = document.querySelector('#timein');
   const adFormTimeout = document.querySelector('#timeout');
 
-
-  const changePrice = (price) => {
-    adFormPrice.placeholder = String(price);
-    adFormPrice.min = price;
-  };
-
   adFormTypeOfLiving.addEventListener('change', () => {
+
+    const changePrice = (price) => {
+      adFormPrice.placeholder = String(price);
+      adFormPrice.min = price;
+    }
+
     switch(adFormTypeOfLiving.value) {
       case 'bungalow':
         changePrice(0);
