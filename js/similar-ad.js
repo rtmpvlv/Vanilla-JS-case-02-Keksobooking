@@ -7,8 +7,8 @@ import {
 
 const SIMILAR_ADS_COUNT = 10;
 
-const PRISE = {
-  MIN: 1,
+let Price = {
+  MIN: 0,
   MAX: 100000,
 };
 const ROOMS = {
@@ -56,7 +56,7 @@ const getSimilarAd = () => {
     offer: {
       title: 'Отличное место для отдыха.',
       address: randomLongitude + ' ' + randomLatitude,
-      price: getRandomInteger(PRISE.MIN, PRISE.MAX),
+      price: getRandomInteger(Price.MIN, Price.MAX),
       type: getRandomArrayElement(TypesOfLiving),
       rooms: getRandomInteger(ROOMS.MIN, ROOMS.MAX),
       guests: getRandomInteger(GUESTS.MIN, GUESTS.MAX),
@@ -76,5 +76,6 @@ const getSimilarAd = () => {
 const getSimilarAds = () => new Array(SIMILAR_ADS_COUNT).fill(null).map(() => getSimilarAd());
 
 export {
+  Price,
   getSimilarAds
 };
