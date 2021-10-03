@@ -1,9 +1,18 @@
+const adFormAddress = document.querySelector('#address');
+adFormAddress.value = '35.68170, 139.75389';
+
+const adFormGetAddress = (lat, lng) => {
+  adFormAddress.readOnly = true;
+  adFormAddress.value = `${lat}, ${lng}`;
+};
+
 const setFiltering = () => {
 
   const adFormTypeOfLiving = document.querySelector('#type');
   const adFormPrice = document.querySelector('#price');
   const adFormTimein = document.querySelector('#timein');
   const adFormTimeout = document.querySelector('#timeout');
+
 
   adFormTypeOfLiving.addEventListener('change', () => {
 
@@ -53,4 +62,7 @@ const setFiltering = () => {
   syncTimeinAndTimeout(adFormTimeout, adFormTimein);
 };
 
-export { setFiltering };
+export {
+  setFiltering,
+  adFormGetAddress
+};

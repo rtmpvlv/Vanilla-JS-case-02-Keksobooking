@@ -5,7 +5,7 @@ import {
   getNewRandomArray
 } from './util.js';
 
-const SIMILAR_ADS_COUNT = 10;
+const SIMILAR_ADS_COUNT = 20;
 
 let Price = {
   MIN: 0,

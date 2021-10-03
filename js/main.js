@@ -1,8 +1,11 @@
+import { notActiveState } from './state.js';
+import { getMap } from './map.js';
 import { setFiltering } from './ad-form.js';
 import { getSimilarAds } from './similar-ad.js';
-import { renderAd } from './render-similar-ad.js';
 
+notActiveState();
 setFiltering();
-getSimilarAds();
-renderAd();
+const similarAdds = getSimilarAds();
+getMap();
 
+export { similarAdds };
