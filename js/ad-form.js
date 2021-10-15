@@ -1,4 +1,22 @@
-const adFormAddress = document.querySelector('#address');
+import { sendData } from './fetch.js';
+import { resetMainPinMarker } from './map.js';
+import { isEscEvent } from './util.js';
+
+const adForm = document.querySelector('.ad-form');
+const adFormAvatar = adForm.querySelector('#avatar');
+const adFormTitle = adForm.querySelector('#title');
+const adFormAddress = adForm.querySelector('#address');
+const adFormTypeOfLiving = adForm.querySelector('#type');
+const adFormPrice = adForm.querySelector('#price');
+const adFormTimein = adForm.querySelector('#timein');
+const adFormTimeout = adForm.querySelector('#timeout');
+const adFormRoomQuantity = adForm.querySelector('#room_number');
+const adFormCapacity = adForm.querySelector('#capacity');
+const adFormFeaturesList = adForm.querySelector('.features');
+const adFormDescription = adForm.querySelector('#description');
+const adFormHousingFileUpload = adForm.querySelector('#images');
+const adFormResetButton = adForm.querySelector('.ad-form__reset');
+
 adFormAddress.value = '35.68170, 139.75389';
 
 const adFormGetAddress = (lat, lng) => {
@@ -6,16 +24,27 @@ const adFormGetAddress = (lat, lng) => {
   adFormAddress.value = `${lat}, ${lng}`;
 };
 
+const resetAdFormValues = () => {
+  adFormAvatar.value = '';
+  adFormTitle.value = '';
+  adFormTypeOfLiving.querySelector('option:nth-child(1)').selected = true;
+  adFormPrice.value = 0;
+  adFormTimein.querySelector('option:nth-child(1)').selected = true;
+  adFormTimeout.querySelector('option:nth-child(1)').selected = true;
+  adFormRoomQuantity.querySelector('option:nth-child(1)').selected = true;
+  adFormCapacity.querySelector('option:nth-child(3)').selected = true;
+  adFormFeaturesList.querySelectorAll('.feature__checkbox').forEach(element => {
+    element.checked = false;
+  });
+  adFormDescription.value = '';
+  adFormHousingFileUpload.value = '';
+  adFormAddress.value = '35.68170, 139.75389';
+  resetMainPinMarker();
+};
+
+adFormResetButton.addEventListener('click', resetAdFormValues);
+
 const setFiltering = () => {
-
-  const adFormTitle = document.querySelector('#title');
-  const adFormTypeOfLiving = document.querySelector('#type');
-  const adFormPrice = document.querySelector('#price');
-  const adFormTimein = document.querySelector('#timein');
-  const adFormTimeout = document.querySelector('#timeout');
-  const adFormRoomQuantity = document.querySelector('#room_number');
-  const adFormCapacity = document.querySelector('#capacity');
-
   const setValidationOnTitle = (title) => {
     title.addEventListener('input', () => {
       if (title.validity.tooShort) {
@@ -114,6 +143,76 @@ const setFiltering = () => {
   };
   syncRoomsAndGuests(adFormRoomQuantity, adFormCapacity);
 };
+
+const manageSuccessWindow = () => {
+  const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+  const successMessage = successMessageTemplate.cloneNode(true);
+
+  const removeSuccessWindow = () => {
+    document.body.removeChild(successMessage);
+    document.removeEventListener('click', removeSuccessWindow);
+    document.removeEventListener('keydown', escPressedWithSuccessWindow);
+  };
+
+  const escPressedWithSuccessWindow = (evt) => {
+    if (isEscEvent(evt)) {
+      removeSuccessWindow();
+    }
+  };
+
+  document.addEventListener('keydown', escPressedWithSuccessWindow);
+  document.addEventListener('click', removeSuccessWindow);
+
+  document.body.appendChild(successMessage);
+};
+
+const manageErrorWindow = () => {
+  const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+  const errorMessage = errorMessageTemplate.cloneNode(true);
+
+  const removeErrorWindow = () => {
+    document.body.removeChild(errorMessage);
+    document.removeEventListener('click', onClickHandler);
+    document.removeEventListener('keydown', escPressedWithErrorWindow);
+  };
+
+  const onClickHandler = (evt) => {
+    if (evt.target != errorMessage.querySelector('.error__message')) {
+      removeErrorWindow();
+    }
+  };
+
+  const escPressedWithErrorWindow = (evt) => {
+    if (isEscEvent(evt)) {
+      removeErrorWindow();
+    }
+  };
+
+  document.addEventListener('keydown', escPressedWithErrorWindow);
+  document.addEventListener('click', onClickHandler);
+
+  document.body.appendChild(errorMessage);
+};
+
+const setUserFormSubmit = () => {
+
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => {
+        resetAdFormValues();
+        manageSuccessWindow();
+      },
+      () => {
+        manageErrorWindow();
+      },
+      new FormData(evt.target),
+    );
+  });
+};
+
+setUserFormSubmit();
 
 export {
   setFiltering,
