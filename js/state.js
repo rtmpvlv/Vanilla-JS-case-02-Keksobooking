@@ -12,13 +12,20 @@ const notActiveState = () => {
   mapFiltersForm.querySelector('fieldset').disabled = true;
 };
 
-const activeState = () => {
+const activeAdForm = () => {
   adForm.classList.remove('ad-form--disabled');
   adFormHeader.disabled = false;
   adFormElements.forEach(item => item.disabled = false);
+};
+
+const activeFilterForm = () => {
   mapFiltersForm.classList.remove('map__filters--disabled');
   mapFiltersForm.querySelectorAll('select').forEach(item => item.disabled = false);
   mapFiltersForm.querySelector('fieldset').disabled = false;
-};
+}
 
-export { notActiveState, activeState };
+export {
+  notActiveState,
+  activeAdForm,
+  activeFilterForm
+};
