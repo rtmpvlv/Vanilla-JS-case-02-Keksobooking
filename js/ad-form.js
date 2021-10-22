@@ -2,8 +2,11 @@ import { sendData } from './fetch.js';
 import { resetMainPinMarker } from './map.js';
 import { isEscEvent } from './util.js';
 
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
 const adForm = document.querySelector('.ad-form');
 const adFormAvatar = adForm.querySelector('#avatar');
+const adFormAvatarPreview = document.querySelector('.ad-form-header__preview img');
 const adFormTitle = adForm.querySelector('#title');
 const adFormAddress = adForm.querySelector('#address');
 const adFormTypeOfLiving = adForm.querySelector('#type');
@@ -16,6 +19,27 @@ const adFormFeaturesList = adForm.querySelector('.features');
 const adFormDescription = adForm.querySelector('#description');
 const adFormHousingFileUpload = adForm.querySelector('#images');
 const adFormResetButton = adForm.querySelector('.ad-form__reset');
+const adFormPhotoPreview = adForm.querySelector('.ad-form__photo');
+
+const uploadAvatar = () => {
+  adFormAvatar.addEventListener('change', () => {
+    const file = adFormAvatar.files[0];
+    const fileName = file.name.toLowerCase();
+    const matches = FILE_TYPES.some((it) => {
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      const reader = new FileReader();
+
+      reader.addEventListener('load', () => {
+        adFormAvatarPreview.src = reader.result;
+      });
+      reader.readAsDataURL(file);
+    }
+  });
+};
+uploadAvatar();
 
 adFormAddress.value = '35.68170, 139.75389';
 
@@ -143,6 +167,30 @@ const setFiltering = () => {
   };
   syncRoomsAndGuests(adFormRoomQuantity, adFormCapacity);
 };
+
+const uploadHousePhoto = () => {
+  adFormHousingFileUpload.addEventListener('change', () => {
+    const file = adFormHousingFileUpload.files[0];
+    const fileName = file.name.toLowerCase();
+    const matches = FILE_TYPES.some((it) => {
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      const reader = new FileReader();
+
+      reader.addEventListener('load', () => {
+        let image = document.createElement('img');
+        image.src = reader.result;
+        image.style.maxWidth = '70px';
+        image.style.maxHeight = '70px';
+        adFormPhotoPreview.appendChild(image);
+      });
+      reader.readAsDataURL(file);
+    }
+  });
+};
+uploadHousePhoto();
 
 const manageSuccessWindow = () => {
   const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
