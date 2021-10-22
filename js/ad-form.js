@@ -1,9 +1,12 @@
 import { sendData } from './fetch.js';
-import { resetMainPinMarker } from './map.js';
+import { resetMainPinMarker, renderAds, adsToRenderSourced } from './map.js';
 import { isEscEvent } from './util.js';
 
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
+const mapCanvas = document.querySelector('#map-canvas');
+const mapFiltersForm = document.querySelector('.map__filters');
+const housingFeaturesInputs = mapFiltersForm.querySelectorAll('input[type="checkbox"]');
 const adForm = document.querySelector('.ad-form');
 const adFormAvatar = adForm.querySelector('#avatar');
 const adFormAvatarPreview = document.querySelector('.ad-form-header__preview img');
@@ -50,6 +53,7 @@ const adFormGetAddress = (lat, lng) => {
 
 const resetAdFormValues = () => {
   adFormAvatar.value = '';
+  adFormAvatarPreview.src = 'img/muffin-grey.svg';
   adFormTitle.value = '';
   adFormTypeOfLiving.querySelector('option:nth-child(1)').selected = true;
   adFormPrice.value = 0;
@@ -57,13 +61,14 @@ const resetAdFormValues = () => {
   adFormTimeout.querySelector('option:nth-child(1)').selected = true;
   adFormRoomQuantity.querySelector('option:nth-child(1)').selected = true;
   adFormCapacity.querySelector('option:nth-child(3)').selected = true;
-  adFormFeaturesList.querySelectorAll('.feature__checkbox').forEach(element => {
-    element.checked = false;
-  });
+  adFormFeaturesList.querySelectorAll('.feature__checkbox').forEach(element => element.checked = false);
+  housingFeaturesInputs.forEach(element => element.checked = false);
   adFormDescription.value = '';
   adFormHousingFileUpload.value = '';
+  adFormPhotoPreview.innerHTML = '';
   adFormAddress.value = '35.68170, 139.75389';
   resetMainPinMarker();
+  renderAds(adsToRenderSourced);
 };
 
 adFormResetButton.addEventListener('click', resetAdFormValues);
@@ -195,11 +200,14 @@ uploadHousePhoto();
 const manageSuccessWindow = () => {
   const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
   const successMessage = successMessageTemplate.cloneNode(true);
+  mapCanvas.style.zIndex = -1;
+  successMessage.style.zIndex = 1;
 
   const removeSuccessWindow = () => {
     document.body.removeChild(successMessage);
     document.removeEventListener('click', removeSuccessWindow);
     document.removeEventListener('keydown', escPressedWithSuccessWindow);
+    mapCanvas.style.zIndex = 1;
   };
 
   const escPressedWithSuccessWindow = (evt) => {
@@ -217,11 +225,14 @@ const manageSuccessWindow = () => {
 const manageErrorWindow = () => {
   const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
   const errorMessage = errorMessageTemplate.cloneNode(true);
+  mapCanvas.style.zIndex = -1;
+  errorMessage.style.zIndex = 1;
 
   const removeErrorWindow = () => {
     document.body.removeChild(errorMessage);
     document.removeEventListener('click', onClickHandler);
     document.removeEventListener('keydown', escPressedWithErrorWindow);
+    mapCanvas.style.zIndex = 1;
   };
 
   const onClickHandler = (evt) => {

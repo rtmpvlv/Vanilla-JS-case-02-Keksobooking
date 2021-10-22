@@ -1,17 +1,21 @@
 /*global L:readonly*/
-/* global _:readonly */
+/*global _:readonly*/
 
 import { activeAdForm, activeFilterForm } from './state.js';
 import { adFormGetAddress } from './ad-form.js';
 import { renderAd } from './render-similar-ad.js';
 import { getData } from './fetch.js';
 
+const ADS_MAX_QUANTITY = 10;
+
+let adsToRenderSourced = new Array;
+
 const map = L.map('map-canvas');
 
 const mainPinIcon = L.icon ({
   iconUrl:'./img/main-pin.svg',
-  iconSize: [42, 42],
-  iconAnchor: [21, 42],
+  iconSize: [52, 52],
+  iconAnchor: [26, 52],
 });
 
 let mainPinMarker = L.marker(
@@ -52,6 +56,60 @@ const resetMainPinMarker = () => {
     let lng = evt.target.getLatLng().lng.toFixed(5);
     adFormGetAddress(lat, lng);
   });
+};
+
+let regularPinMarkers = [];
+let regularPinMarker1 = L.marker();
+let regularPinMarker2 = L.marker();
+let regularPinMarker3 = L.marker();
+let regularPinMarker4 = L.marker();
+let regularPinMarker5 = L.marker();
+let regularPinMarker6 = L.marker();
+let regularPinMarker7 = L.marker();
+let regularPinMarker8 = L.marker();
+let regularPinMarker9 = L.marker();
+let regularPinMarker10 = L.marker();
+
+regularPinMarkers.push(
+  regularPinMarker1,
+  regularPinMarker2,
+  regularPinMarker3,
+  regularPinMarker4,
+  regularPinMarker5,
+  regularPinMarker6,
+  regularPinMarker7,
+  regularPinMarker8,
+  regularPinMarker9,
+  regularPinMarker10,
+);
+
+const regularPinIcon = L.icon ({
+  iconUrl:'./img/pin.svg',
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
+});
+
+const renderAds = (ads) => {
+  regularPinMarkers.forEach(item => item.remove());
+  ads.slice(0, ADS_MAX_QUANTITY);
+  for (let i = 0; i < 10; i++) {
+    if (ads[i]) {
+      regularPinMarkers[i] = L.marker(
+        {
+          lat: ads[i].location.lat,
+          lng: ads[i].location.lng,
+        },
+        {
+          icon: regularPinIcon,
+        },
+      );
+      regularPinMarkers[i]
+        .addTo(map)
+        .bindPopup(renderAd(ads[i]), {keepInView: true})
+    } else if (!ads[i]) {
+      continue;
+    }
+  }
 }
 
 const getMap = () => {
@@ -63,16 +121,9 @@ const getMap = () => {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
 
-  const regularPinIcon = L.icon ({
-    iconUrl:'./img/pin.svg',
-    iconSize: [36, 36],
-    iconAnchor: [18, 36],
-  });
-
   getData((ads) => {
-    const ADS_MAX_QUANTITY = 10;
 
-    const adsToRenderSourced = ads.slice();
+    adsToRenderSourced = ads.slice();
     let adsToRenderModified = adsToRenderSourced;
     let adsToRenderModifiedWithTypesOfLiving = adsToRenderSourced;
     let adsToRenderModifiedWithPrice = adsToRenderSourced;
@@ -230,56 +281,7 @@ const getMap = () => {
     housingGuestsSelect.addEventListener('change', filterGuests);
     housingFeaturesInputs.forEach(feature => feature.addEventListener('change', filterFeatures));
 
-    let regularPinMarkers = [];
-    let regularPinMarker1 = L.marker();
-    let regularPinMarker2 = L.marker();
-    let regularPinMarker3 = L.marker();
-    let regularPinMarker4 = L.marker();
-    let regularPinMarker5 = L.marker();
-    let regularPinMarker6 = L.marker();
-    let regularPinMarker7 = L.marker();
-    let regularPinMarker8 = L.marker();
-    let regularPinMarker9 = L.marker();
-    let regularPinMarker10 = L.marker();
-
-    regularPinMarkers.push(
-      regularPinMarker1,
-      regularPinMarker2,
-      regularPinMarker3,
-      regularPinMarker4,
-      regularPinMarker5,
-      regularPinMarker6,
-      regularPinMarker7,
-      regularPinMarker8,
-      regularPinMarker9,
-      regularPinMarker10,
-    );
-
-    const renderAds = (ads) => {
-      regularPinMarkers.forEach(item => item.remove());
-      ads.slice(0, ADS_MAX_QUANTITY);
-      for (let i = 0; i < 10; i++) {
-        if (ads[i]) {
-          regularPinMarkers[i] = L.marker(
-            {
-              lat: ads[i].location.lat,
-              lng: ads[i].location.lng,
-            },
-            {
-              icon: regularPinIcon,
-            },
-          );
-          regularPinMarkers[i]
-            .addTo(map)
-            .bindPopup(renderAd(ads[i]), {keepInView: true})
-        } else if (!ads[i]) {
-          continue;
-        }
-      }
-    }
-
     const renderAdsDebounced = _.debounce(renderAds, 500);
-
     renderAdsDebounced(adsToRenderModified);
     activeFilterForm();
   });
@@ -287,5 +289,7 @@ const getMap = () => {
 
 export {
   getMap,
-  resetMainPinMarker
+  resetMainPinMarker,
+  renderAds,
+  adsToRenderSourced
 };
