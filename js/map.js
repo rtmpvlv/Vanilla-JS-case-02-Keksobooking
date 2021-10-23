@@ -6,6 +6,10 @@ import { adFormGetAddress } from './ad-form.js';
 import { renderAd } from './render-similar-ad.js';
 import { getData } from './fetch.js';
 
+const DEFAULT_LAT = 35.681700.toFixed(5);
+const DEFAULT_LNG = 139.753891.toFixed(5);
+const DEFAULT_ZOOM_LEVEL = 13;
+
 const ADS_MAX_QUANTITY = 10;
 
 let adsToRenderSourced = new Array;
@@ -20,8 +24,8 @@ const mainPinIcon = L.icon ({
 
 let mainPinMarker = L.marker(
   {
-    lat: 35.681700,
-    lng: 139.753891,
+    lat: DEFAULT_LAT,
+    lng: DEFAULT_LNG,
   },
   {
     draggable: true,
@@ -41,8 +45,8 @@ const resetMainPinMarker = () => {
 
   mainPinMarker = L.marker(
     {
-      lat: 35.681700,
-      lng: 139.753891,
+      lat: DEFAULT_LAT,
+      lng: DEFAULT_LNG,
     },
     {
       draggable: true,
@@ -92,7 +96,7 @@ const regularPinIcon = L.icon ({
 const renderAds = (ads) => {
   regularPinMarkers.forEach(item => item.remove());
   ads.slice(0, ADS_MAX_QUANTITY);
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < regularPinMarkers.length; i++) {
     if (ads[i]) {
       regularPinMarkers[i] = L.marker(
         {
@@ -115,7 +119,7 @@ const renderAds = (ads) => {
 const getMap = () => {
   map.on('load', () => {
     activeAdForm();
-  }).setView([35.681700, 139.753891], 13);
+  }).setView([DEFAULT_LAT, DEFAULT_LNG], DEFAULT_ZOOM_LEVEL);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -192,13 +196,13 @@ const getMap = () => {
           adsToRenderModifiedWithRooms = adsToRenderSourced;
           break;
         case '1':
-          adsToRenderModifiedWithRooms = adsToRenderSourced.filter(ad => ad.offer.rooms == 1);
+          adsToRenderModifiedWithRooms = adsToRenderSourced.filter(ad => ad.offer.rooms === 1);
           break;
         case '2':
-          adsToRenderModifiedWithRooms = adsToRenderSourced.filter(ad => ad.offer.rooms == 2);
+          adsToRenderModifiedWithRooms = adsToRenderSourced.filter(ad => ad.offer.rooms === 2);
           break;
         case '3':
-          adsToRenderModifiedWithRooms = adsToRenderSourced.filter(ad => ad.offer.rooms == 3);
+          adsToRenderModifiedWithRooms = adsToRenderSourced.filter(ad => ad.offer.rooms === 3);
           break;
       }
     };
@@ -209,13 +213,13 @@ const getMap = () => {
           adsToRenderModifiedWithGuests = adsToRenderSourced;
           break;
         case '2':
-          adsToRenderModifiedWithGuests = adsToRenderSourced.filter(ad => ad.offer.guests == 2);
+          adsToRenderModifiedWithGuests = adsToRenderSourced.filter(ad => ad.offer.guests === 2);
           break;
         case '1':
-          adsToRenderModifiedWithGuests = adsToRenderSourced.filter(ad => ad.offer.guests == 1);
+          adsToRenderModifiedWithGuests = adsToRenderSourced.filter(ad => ad.offer.guests === 1);
           break;
         case '0':
-          adsToRenderModifiedWithGuests = adsToRenderSourced.filter(ad => ad.offer.guests == 0);
+          adsToRenderModifiedWithGuests = adsToRenderSourced.filter(ad => ad.offer.guests === 0);
           break;
       }
     };

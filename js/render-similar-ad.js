@@ -6,7 +6,7 @@ const renderAd = (ad) => {
 
   const {author, offer} = ad;
 
-  if (!author.avatar || author.avatar == 'img/avatars/user10.png' || author.avatar == 'img/avatars/user09.png' || author.avatar == 'img/avatars/user11.png') {
+  if (!author.avatar || author.avatar === 'img/avatars/user10.png' || author.avatar === 'img/avatars/user09.png' || author.avatar === 'img/avatars/user11.png') {
     newAdd.querySelector('.popup__avatar').src = 'img/avatars/default.png';
   } else {
     newAdd.querySelector('.popup__avatar').src = author.avatar;

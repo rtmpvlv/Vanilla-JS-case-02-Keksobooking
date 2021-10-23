@@ -1,8 +1,14 @@
 import { sendData } from './fetch.js';
-import { resetMainPinMarker, renderAds, adsToRenderSourced } from './map.js';
 import { isEscEvent } from './util.js';
+import {
+  resetMainPinMarker,
+  renderAds,
+  adsToRenderSourced
+} from './map.js';
 
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+const DEFAULT_LAT = 35.681700.toFixed(5);
+const DEFAULT_LNG = 139.753891.toFixed(5);
 
 const mapCanvas = document.querySelector('#map-canvas');
 const mapFiltersForm = document.querySelector('.map__filters');
@@ -44,7 +50,7 @@ const uploadAvatar = () => {
 };
 uploadAvatar();
 
-adFormAddress.value = '35.68170, 139.75389';
+adFormAddress.value = `${DEFAULT_LAT}, ${DEFAULT_LNG}`;
 
 const adFormGetAddress = (lat, lng) => {
   adFormAddress.readOnly = true;
@@ -66,7 +72,7 @@ const resetAdFormValues = () => {
   adFormDescription.value = '';
   adFormHousingFileUpload.value = '';
   adFormPhotoPreview.innerHTML = '';
-  adFormAddress.value = '35.68170, 139.75389';
+  adFormAddress.value = `${DEFAULT_LAT}, ${DEFAULT_LNG}`;
   resetMainPinMarker();
   renderAds(adsToRenderSourced);
 };
@@ -236,7 +242,7 @@ const manageErrorWindow = () => {
   };
 
   const onClickHandler = (evt) => {
-    if (evt.target != errorMessage.querySelector('.error__message')) {
+    if (evt.target !== errorMessage.querySelector('.error__message')) {
       removeErrorWindow();
     }
   };
